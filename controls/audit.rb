@@ -4,9 +4,8 @@
 
 title 'audit section'
 
-
-control 'audit-1.0' do                        # A unique ID for this control
-  impact 0.7                                # The criticality, if this control fails.
+control 'audit-1.0' do # A unique ID for this control
+  impact 0.7 # The criticality, if this control fails.
   title 'auditd should be present'
   desc 'Ensure auditd executable and configuration are present'
   if os.darwin?
@@ -17,11 +16,6 @@ control 'audit-1.0' do                        # A unique ID for this control
       its('content') { should match 'flags:' }
       its('content') { should match 'policy:cnt,argv' }
       its('content') { should match 'superuser-set-sflags-mask:' }
-    end
-    describe file('/var/audit') do
-      it { should be_directory }
-      it { should be_owned_by 'root' }
-      its('mode') { should cmp '0700' }
     end
   else
     describe file('/etc/audit') do
@@ -51,7 +45,7 @@ control 'audit-2.0' do
   impact 0.7
   title 'auditd should be running'
   desc 'Ensure auditd is running'
-  if not os.darwin?
+  unless os.darwin?
     describe processes('auditd') do
       its('users') { should eq ['root'] }
       its('list.length') { should eq 1 }
@@ -64,6 +58,11 @@ control 'audit-3.0' do
   title 'auditd should have log files'
   desc 'Ensure auditd logs file are present'
   if os.darwin?
+    describe file('/var/audit') do
+      it { should be_directory }
+      it { should be_owned_by 'root' }
+      its('mode') { should cmp '0700' }
+    end
     describe file('/var/audit/current') do
       it { should be_symlink }
       it { should be_owned_by 'root' }
@@ -78,7 +77,6 @@ control 'audit-4.0' do
   desc 'Ensure auditd logs file were updated less than 900s in the past'
   describe file('/var/audit/current').mtime.to_i do
     it { should <= Time.now.to_i }
-    it { should >= Time.now.to_i - 900}
+    it { should >= Time.now.to_i - 900 }
   end
 end
-
