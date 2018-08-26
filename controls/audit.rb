@@ -9,6 +9,7 @@ control 'audit-1.0' do # A unique ID for this control
   impact 0.7 # The criticality, if this control fails.
   title 'auditd should be present'
   desc 'Ensure auditd executable and configuration are present'
+  only_if { !(virtualization.role == 'guest' && virtualization.system =~ /^(lxc|docker)$/) }
   if os.darwin?
     describe file('/etc/security/audit_control') do
       it { should be_file }
@@ -46,6 +47,7 @@ control 'audit-2.0' do
   impact 0.7
   title 'auditd should be running'
   desc 'Ensure auditd is running'
+  only_if { !(virtualization.role == 'guest' && virtualization.system =~ /^(lxc|docker)$/) }
   unless os.darwin?
     describe processes('auditd') do
       its('users') { should eq ['root'] }
@@ -76,6 +78,7 @@ control 'audit-4.0' do
   impact 0.7
   title 'auditd updated log files'
   desc 'Ensure auditd logs file were updated less than 900s in the past'
+  only_if { !(virtualization.role == 'guest' && virtualization.system =~ /^(lxc|docker)$/) }
   describe file('/var/audit/current').mtime.to_i do
     it { should <= Time.now.to_i }
     it { should >= Time.now.to_i - 900 }
