@@ -9,6 +9,7 @@ control 'audit-1.0' do # A unique ID for this control
   impact 0.7 # The criticality, if this control fails.
   title 'auditd should be present'
   desc 'Ensure auditd executable and configuration are present'
+  only_if { !(virtualization.role == 'guest' && (virtualization.system == 'docker' || virtualization.system == 'lxd')) }
   if os.darwin?
     describe file('/etc/security/audit_control') do
       it { should be_file }
@@ -59,6 +60,7 @@ control 'audit-3.0' do
   impact 0.7
   title 'auditd should have log files'
   desc 'Ensure auditd logs file are present'
+  only_if { !(virtualization.role == 'guest' && (virtualization.system == 'docker' || virtualization.system == 'lxd')) }
   if os.darwin?
     describe file('/var/audit') do
       it { should be_directory }
