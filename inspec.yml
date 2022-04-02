@@ -1,8 +1,8 @@
-name: audit
+name: auditd-baseline
 title: Auditd baseline - InSpec Profile
 maintainer: juju4
 copyright: juju4
 copyright_email: juju4@users.noreply.github.com
 license: All Rights Reserved
-summary: An InSpec Compliance Profile for auditd
+summary: An InSpec Compliance Profile for Linux auditd
 version: 0.1.0
