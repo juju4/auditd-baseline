@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# copyright: 2015, The Authors
+# copyright:: 2015, The Authors
 # license: All rights reserved
 
 title 'audit section'
