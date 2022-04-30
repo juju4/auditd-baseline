@@ -1,0 +1,39 @@
+---
+name: inspec-exec
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Inspec upstream packages
+        run: |
+          curl -O https://packages.chef.io/files/stable/inspec/5.12.2/ubuntu/20.04/inspec_5.12.2-1_amd64.deb
+          sudo apt-get install -y ./inspec_5.12.2-1_amd64.deb
+          sudo mkdir -p /etc/chef/accepted_licenses
+          sudo touch /etc/chef/accepted_licenses/inspec
+      - name: Environment
+        run: |
+          set -x
+          env
+          which inspec || true
+      - name: Run Inspec exec
+        run: inspec exec .
+        continue-on-error: true
+      - name: Configure base auditd
+        run: |
+          set -x
+          sudo apt-get install -y auditd
+        continue-on-error: true
+      - name: Run Inspec exec
+        run: inspec exec .
