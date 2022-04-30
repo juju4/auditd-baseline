@@ -40,4 +40,4 @@ jobs:
           sudo ls -lAR /etc/audit/ /etc/audisp/
           ls -lA /var/log/audit/
       - name: Run Inspec exec
-        run: inspec exec --sudo .
+        run: sudo inspec exec .
