@@ -4,8 +4,6 @@ name: rake
 on:
   push:
   pull_request:
-  schedule:  # run weekly, every Monday 11:00
-    - cron: '0 11 * * 1'
 
 jobs:
   build:
